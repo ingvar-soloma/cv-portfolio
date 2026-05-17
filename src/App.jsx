@@ -216,11 +216,21 @@ export default function App() {
     return saved === null ? true : saved === 'true';
   });
 
+  const [printScale, setPrintScale] = useState(() => {
+    const saved = localStorage.getItem('print-scale');
+    return saved ? parseFloat(saved) : 0.95;
+  });
+
   const [showSettings, setShowSettings] = useState(false);
 
   useEffect(() => {
     initAnalytics();
   }, []);
+
+  useEffect(() => {
+    document.documentElement.style.setProperty('--print-scale', String(printScale));
+    localStorage.setItem('print-scale', String(printScale));
+  }, [printScale]);
 
   useEffect(() => {
     if (isDarkMode) {
@@ -320,6 +330,27 @@ export default function App() {
                             <div className={`w-4 h-4 bg-white rounded-full transition-transform ${isBicyclistVisible ? 'translate-x-4' : 'translate-x-0'}`}></div>
                           </div>
                         </button>
+
+                        <div className="p-2 border-t border-gray-100 dark:border-slate-800 mt-2 pt-3">
+                          <div className="flex justify-between items-center mb-2 px-1">
+                            <span className="text-xs font-bold text-gray-700 dark:text-gray-200 font-sans">Print Scale</span>
+                            <span className="text-[10px] font-black text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/40 px-2 py-0.5 rounded font-sans">{Math.round(printScale * 100)}%</span>
+                          </div>
+                          <input
+                            type="range"
+                            min="0.75"
+                            max="1.10"
+                            step="0.05"
+                            value={printScale}
+                            onChange={(e) => setPrintScale(parseFloat(e.target.value))}
+                            className="w-full h-1.5 bg-gray-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-indigo-600"
+                          />
+                          <div className="flex justify-between text-[8px] text-gray-400 dark:text-gray-500 font-black mt-1 px-1 font-sans">
+                            <span>75%</span>
+                            <span>95% (Rec.)</span>
+                            <span>110%</span>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -564,10 +595,10 @@ export default function App() {
                   href: project.url,
                   target: "_blank",
                   rel: "noopener",
-                  className: "group block bg-white dark:bg-slate-900 border border-gray-100 dark:border-slate-800 rounded-3xl p-8 print:p-4 shadow-lg dark:shadow-none hover:shadow-2xl dark:hover:border-indigo-900/50 hover:translate-y-[-8px] transition-all duration-500 relative overflow-hidden cursor-pointer",
+                  className: "group block bg-white dark:bg-slate-900 border border-gray-100 dark:border-slate-800 rounded-3xl p-8 print:p-4 shadow-lg dark:shadow-none hover:shadow-2xl dark:hover:border-indigo-900/50 hover:translate-y-[-8px] transition-all duration-500 relative overflow-hidden cursor-pointer print-card",
                   "data-track": `project-${idx}`
                 } : {
-                  className: "group block bg-white dark:bg-slate-900 border border-gray-100 dark:border-slate-800 rounded-3xl p-8 print:p-4 shadow-lg dark:shadow-none relative overflow-hidden",
+                  className: "group block bg-white dark:bg-slate-900 border border-gray-100 dark:border-slate-800 rounded-3xl p-8 print:p-4 shadow-lg dark:shadow-none relative overflow-hidden print-card",
                   "data-track": `project-${idx}`
                 };
 

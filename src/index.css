@@ -111,6 +111,7 @@ body {
     font-size: 9.5pt !important;
     color: #000 !important;
     line-height: 1.25 !important;
+    zoom: var(--print-scale, 0.95) !important;
   }
 
   main {
@@ -121,14 +122,20 @@ body {
   }
 
   section {
-    margin-bottom: 2rem !important;
+    margin-bottom: 1.25rem !important;
   }
 
   article,
   .print-card {
     page-break-inside: avoid;
     break-inside: avoid;
-    margin-bottom: 1.5rem !important;
+    margin-bottom: 0.75rem !important;
+  }
+
+  /* Prevent orphaned headings at the bottom of pages */
+  h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid !important;
+    break-after: avoid !important;
   }
 
   /* Hide background patterns in print even if they have inline display */
